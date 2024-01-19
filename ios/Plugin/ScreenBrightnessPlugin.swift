@@ -39,9 +39,16 @@ public class ScreenBrightnessPlugin: CAPPlugin {
                 return
             }
 
-            let original = state?.original ?? UIScreen.main.brightness
-            state = BrightnessState(original: original, new: CGFloat(brightness))
-            UIScreen.main.brightness = CGFloat(brightness)
+            if brightness < 0 {
+                if let state = state {
+                    UIScreen.main.brightness = state.original
+                    self.state = .none
+                }
+            } else {
+                let original = state?.original ?? UIScreen.main.brightness
+                state = BrightnessState(original: original, new: CGFloat(brightness))
+                UIScreen.main.brightness = CGFloat(brightness)
+            }
             call.resolve()
         }
     }
