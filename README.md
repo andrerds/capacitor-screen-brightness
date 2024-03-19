@@ -103,9 +103,9 @@ Returns info than contains the current brightness level
 
 #### SetBrightnessOptions
 
-| Prop             | Type                | Description                                                                                                                                       | Since |
-| ---------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`brightness`** | <code>number</code> | The level to set the brightness to, from 0.0 (very dim) to 1.0 (full brightness) setting the value to -1 restores the user configured brightness. | 1.0.0 |
+| Prop             | Type                | Description                                                                                                                                                   | Since |
+| ---------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`brightness`** | <code>number</code> | The level to set the brightness to, from 0.0 (very dim) to 1.0 (full brightness) On Android, setting the value to -1 restores the user configured brightness. | 1.0.0 |
 
 
 #### GetBrightnessReturnValue
