@@ -1,6 +1,8 @@
 package com.elylucas.capscreenbrightness;
 
 import android.app.Activity;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.WindowManager;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
@@ -13,29 +15,28 @@ public class ScreenBrightnessPlugin extends Plugin {
 
     @PluginMethod
     public void setBrightness(PluginCall call) {
-       try {
-        Float brightness = call.getFloat("brightness");
+        try {
+            Float brightness = call.getFloat("brightness");
 
-        if (brightness == null) {
-            brightness = getDefaultBrightness();
-        }
+            if (brightness == null) {
+                brightness = getDefaultBrightness();
+            }
 
+            Activity activity = getActivity();
+            WindowManager.LayoutParams layoutParams = activity.getWindow().getAttributes();
 
-        Activity activity = getActivity();
-        WindowManager.LayoutParams layoutParams = activity.getWindow().getAttributes();
-
-       Float finalBrightness = brightness;
-        activity.runOnUiThread(
-          () -> {
-            layoutParams.screenBrightness = finalBrightness;
-            activity.getWindow().setAttributes(layoutParams);
+            Float finalBrightness = brightness;
+            activity.runOnUiThread(
+                () -> {
+                    layoutParams.screenBrightness = finalBrightness;
+                    activity.getWindow().setAttributes(layoutParams);
+                    call.resolve();
+                }
+            );
+        } catch (Exception e) {
+            Log.d("ExceptionBrightness", e.getMessage());
             call.resolve();
-          }
-        );
-       } catch (Exception e){
-           Log.d("ExceptionBrightness",  e.getMessage());
-           call.resolve();
-       }
+        }
     }
 
     @PluginMethod
@@ -51,14 +52,13 @@ public class ScreenBrightnessPlugin extends Plugin {
         );
     }
 
-  private Float getDefaultBrightness() {
-    try {
-       int systemBrightness = Settings.System.getInt(getContext().getContentResolver(), Settings.System.SCREEN_BRIGHTNESS);
-       return systemBrightness / 255.0f;
-    } catch (Settings.SettingNotFoundException e) {
-
-      e.printStackTrace();
-      return 0.5f;
+    private Float getDefaultBrightness() {
+        try {
+            int systemBrightness = Settings.System.getInt(getContext().getContentResolver(), Settings.System.SCREEN_BRIGHTNESS);
+            return systemBrightness / 255.0f;
+        } catch (Settings.SettingNotFoundException e) {
+            e.printStackTrace();
+            return 0.5f;
+        }
     }
-  }
 }
